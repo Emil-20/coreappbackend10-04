@@ -398,7 +398,7 @@ class internship(models.Model):
     total_fee = models.IntegerField(default=0, null=True, blank=True)
     amount = models.IntegerField(default=0, null=True, blank=True)
     pay_date = models.DateField(default=0, null=True, blank=True)
-    balence = models.IntegerField(default=0, null=True, blank=True)
+    balance = models.IntegerField(default=0, null=True, blank=True)
     total_pay =models.IntegerField(default=0, null=True, blank=True)
     internshiptype = models.ForeignKey(internship_type,on_delete=models.SET_NULL,related_name='internship_type', null=True, blank=True)
     
@@ -408,8 +408,7 @@ class internship(models.Model):
 
 class internship_paydata(models.Model):
     date = models.DateField()
-    internship_user = models.ForeignKey(internship,on_delete=models.SET_NULL,
-                             related_name='internship_user', null=True, blank=True)
+    internship_user = models.ForeignKey(internship,on_delete=models.SET_NULL,related_name='internship_user', null=True, blank=True)
     amount = models.IntegerField()
 
 

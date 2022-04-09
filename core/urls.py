@@ -980,6 +980,12 @@ urlpatterns = [
 
      ############Emil   
     re_path(r'^accounts_internship/', views.accounts_internship, name="accounts_internship"),
+    re_path(r'^internship_payment_pending/', views.internship_payment_pending, name="internship_payment_pending"),
+    re_path(r'^addamount/(?P<id>\d+)/', views.addamount, name="addamount"),
+
+
+
+
     
     re_path(r'^offerletter/(?P<id>\d+)/$', views.offerletter, name="offerletter"),
     re_path(r'^relieveletter/(?P<id>\d+)/$', views.relieveletter, name="relieveletter"),

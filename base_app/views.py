@@ -9019,6 +9019,44 @@ def accounts_internship(request):
    
     return render(request, 'accounts_internship.html', {'z': z})
 
+def internship_payment_pending(request):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+
+    data=internship.objects.all()
+   
+    return render(request, 'internship_payment_pending.html', {'z': z,'data': data,})
+
+def addamount(request,id):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+        if request.method == "POST":
+            
+            abc = internship.objects.get(id=id)
+           
+            abc.pay_date = request.POST['date']
+            abc.amount = request.POST['amount']
+            abc.total_pay=int(request.POST['amount'])+abc.total_pay
+            abc.balance=abc.total_fee - abc.total_pay
+
+
+
+            
+            abc.save()
+            abcd = internship_paydata()
+            abcd.internship_user=abc
+            abcd.date = request.POST['date']
+            abcd.amount = request.POST['amount']
+            abcd.save()
+            return redirect('internship_payment_pending')
+        return render(request, 'addamount.html', {'z': z, })
+    else:
+        return redirect('/')
+
 
     # ************************Reset password*****************************
 
