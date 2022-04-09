@@ -1,0 +1,52 @@
+{%extends 'index_accounts.html'%} {%load static%} {%block content%}
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin">
+      <div class="card mt-3 mb-5">
+                <div class="card-body" >
+                  
+                    <div class="table-responsive">
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>PARTICULARS</th>
+                                    <th>FROM DATE</th>
+                                    <th>TO DATE </th>
+                                    <th>ACCOUNT NUMBER</th>
+                                    <th>BANK NAME</th>
+                                    <th>BRANCH</th>
+                                    <th>VIEW SLIP</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <br>
+                            {% if acc %} {% for i in acc %}
+                            <tr>
+                                <td>{{user.fullname}}</td>
+                                <td>{{i.fromdate|date:'d-m-Y'}}</td>
+                                <td>{{i.todate|date:'d-m-Y'}}</td>
+                                <td>
+                                    {{user.account_no}}</td>
+                                <td>
+                                    {{user.bank_name}}</td>
+                                <td>
+                                    {{user.bank_branch}}</td>
+                                
+                                <td style="text-decoration: none;">
+                                    <a href="/paypdf/{{i.id}}/{{user.id}}">View slip</a>
+                            </tr>
+                            {% endfor %}  {% else %}
+                            <h5>Nothing to display...</h5>
+                            {% endif %} 
+                                
+    
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{%endblock%}
