@@ -9019,15 +9019,32 @@ def accounts_internship(request):
    
     return render(request, 'accounts_internship.html', {'z': z})
 
-def internship_payment_pending(request):
+def accounts_internship_payment_pending(request):
     if 'usernameacnt2' in request.session:
         if request.session.has_key('usernameacnt2'):
             usernameacnt2 = request.session['usernameacnt2']
         z = user_registration.objects.filter(id=usernameacnt2)
 
-    data=internship.objects.all()
+    data=internship.objects.filter(complete_status='0')
+    use=internship_type.objects.all()
    
-    return render(request, 'internship_payment_pending.html', {'z': z,'data': data,})
+    return render(request, 'internship_payment_pending.html', {'z': z,'data': data,'use': use})
+
+def accounts_internship_type_sel(request,id):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+    data=internship.objects.all()
+    ab=internship.objects.get(id=id)
+    ab.internshiptype_id=request.POST['inter']    
+    use=internship_type.objects.get(id=int(request.POST['inter']))
+    ab.total_fee=use.fee
+    ab.save()
+    msg_success = "Add Succesfully"
+   
+   
+    return render(request, 'internship_payment_pending.html', {'z': z,'data': data,'msg_success': msg_success})
 
 def addamount(request,id):
     if 'usernameacnt2' in request.session:
@@ -9040,9 +9057,11 @@ def addamount(request,id):
            
             abc.pay_date = request.POST['date']
             abc.amount = request.POST['amount']
-            abc.total_pay=int(request.POST['amount'])+abc.total_pay
-            abc.balance=abc.total_fee - abc.total_pay
+            abc.total_pay= int(request.POST['amount'])+abc.total_pay
+            abc.balance = abc.total_fee - abc.total_pay
 
+            # member.total_pay = int(request.POST['amount'])+member.total_pay
+            # member.payment_balance = member.total_amount - member.total_pay
 
 
             
@@ -9052,8 +9071,104 @@ def addamount(request,id):
             abcd.date = request.POST['date']
             abcd.amount = request.POST['amount']
             abcd.save()
-            return redirect('internship_payment_pending')
-        return render(request, 'addamount.html', {'z': z, })
+            msg_success = "Add Succesfully"
+            return render(request, 'internship_payment_pending.html', {'z': z,'msg_success': msg_success})
+        return render(request, 'internship_payment_pending.html', {'z': z,})
+    else:
+        return redirect('/')
+    
+def accounts_internship_verify(request,id):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+
+    data=internship.objects.get(id=id)
+    data.verify_status=1
+    data.save()
+    msg_success = "Verifyed Succesfully"
+    return render(request, 'internship_payment_pending.html', {'z': z,'msg_success': msg_success})
+
+def accounts_internship_complete(request,id):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+
+    data=internship.objects.get(id=id)
+    data.complete_status=1
+    data.save()
+    msg_success = "Verifyed Succesfully"
+    return render(request, 'internship_payment_pending.html', {'z': z,'msg_success': msg_success})
+
+def accounts_internship_viewall(request):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+
+    data=internship.objects.filter(complete_status='1')
+    use=internship_type.objects.all()
+   
+    return render(request, 'accounts_internship_viewall.html', {'z': z,'data': data,'use': use})
+   
+    
+
+
+#########################   jishnu   ##############################
+
+def accounts_intrenship_type(request):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+        mem = internship_type.objects.all()
+        
+    return render(request, 'accounts_intrenship_type.html', {'z': z,'mem':mem,})
+
+def accounts_intrenship_add(request):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+
+        if request.method == 'POST':
+            vars = internship_type()
+            vars.type = request.POST['type']
+            vars.duration = request.POST['duration']
+            vars.fee = request.POST['fees']
+            vars.save()
+            msg_success = "Add Succesfully"
+            return render(request, 'accounts_intrenship_add.html', {'z': z,'msg_success':msg_success})
+
+    return render(request, 'accounts_intrenship_add.html', {'z': z,})
+
+def internshiptypeupdate(request, id):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+        if request.method == "POST":
+            vars = internship_type.objects.get(id=id)
+            vars.type = request.POST['types']
+            vars.duration = request.POST['durations']
+            vars.fee = request.POST['fees']
+            vars.save()
+            msg_success = "Updated Succesfully"
+            return render(request, 'accounts_intrenship_type.html', {'z': z, 'msg_success':msg_success })
+        return render(request, 'accounts_intrenship_type.html', {'z': z, })
+    else:
+        return redirect('/')
+
+def internshiptypedelete(request, id):
+    if 'usernameacnt2' in request.session:
+        if request.session.has_key('usernameacnt2'):
+            usernameacnt2 = request.session['usernameacnt2']
+        z = user_registration.objects.filter(id=usernameacnt2)
+        vars = internship_type.objects.get(id=id)
+        vars.delete()
+        msg_success = "Deleted Succesfully"
+        return render(request, 'accounts_intrenship_type.html', {'z': z, 'msg_success':msg_success })
     else:
         return redirect('/')
 
