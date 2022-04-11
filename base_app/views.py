@@ -11008,7 +11008,14 @@ def accounts_download_promissory(request, id):
             usernameacnt2 = request.session['usernameacnt2']
         z = user_registration.objects.filter(id=usernameacnt2)
         user = user_registration.objects.get(id=id)
-        c = Promissory.objects.filter(user_id=id).latest('id')
+        
+        
+        try:
+           c = Promissory.objects.filter(user_id=id).latest('id')
+        except Promissory.DoesNotExist:
+           c = None
+           msg_success="No Data in Database Pleace Add Promissory"
+           return render(request, 'accounts_promissory.html', {'z': z,'msg_success':msg_success})
         print(c)
     return render(request, 'accounts_download_promissory.html', {'z': z, 'user': user, 'c': c})
 

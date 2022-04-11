@@ -65,8 +65,12 @@ table tr[data-href] {
                     {% csrf_token%}
                   <td>
                     <select class="badge badge-outline-primary bg-dark text-light"name="inter" required>
-                      <option style="display: none" value="{{i.id}}">Internship Type</option>
+                      <option style="display: none" >{{t.internshiptype.type}}</option>
+                      <option style="display: none" >Internship Type</option>
                       {%for i in use%}
+                     
+                      
+                      
 
                       <option value="{{i.id}}">{{i.type}}</option>
                       {%endfor%}
